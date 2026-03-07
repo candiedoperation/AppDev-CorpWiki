@@ -1,11 +1,11 @@
 ---
 sidebar_position: 100
-slug: /roadmap
+slug: /feature-roadmap
 ---
 
 import { Timeline } from '@site/src/components/Timeline';
 
-# Roadmap
+# Feature Roadmap
 
 This page tracks the progress, current focus, and future plans for our key projects.
 
