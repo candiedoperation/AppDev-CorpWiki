@@ -14,7 +14,7 @@ sidebar_position: 2
 | Packages                | `lowercase`            | `com.example.utils`      |
 | Constants               | `UPPER_SNAKE_CASE`     | `MAX_RETRIES`            |
 | Type Parameters         | Single capital letter  | `T`, `E`, `K`            |
-| Private Fields          | `lowerCamelCase`       | `_` prefix not used      |
+| Private Fields          | `lowerCamelCase`       | `socialSecurityNumber`   |
 
 ## Abbreviations
 Always treat abbreviations like words.
@@ -24,7 +24,7 @@ loadHTTPURL = "url here";  // avoid
 ```
 
 ## Descriptiveness
-Name variables for what they are, not their type. Never use Hungarian notation.
+Name variables for what they are, not their type.
 ```java
 String name;      // good
 String strName;   // bad — don't prefix with type

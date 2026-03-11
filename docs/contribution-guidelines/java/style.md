@@ -6,8 +6,8 @@ sidebar_position: 1
 This style is influenced from the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
 
 ## Indentation and Spacing / Horizontal Spacing
-Always use 2 space tabbing. (i.e. not `\t` character)  
-Keep spacing around operators
+Always use 2 or 4 space tabbing (i.e. not `\t` character).   
+Keep spacing around operators.
 ```java
 int sum = a + b; // good
 int sum=a+b;     // bad
@@ -16,7 +16,7 @@ int sum=a+b;     // bad
 Limit line length to be < 100 characters.
 
 ## Vertical Spacing
-Use blank lines to separate logical blocks
+Use blank lines to separate logical blocks.
 ```java
 void foo() {
   validateUserInput();
@@ -26,14 +26,14 @@ void foo() {
   otherThing();
 }
 ```
-It is preferred to use vertical separators sparingly, having single lines of code isolated
+Prefer to use vertical separators sparingly, having single lines of code isolated
 vertically is not preferred.
 
 One blank line between class members (fields, constructors, methods). Two blank lines between
 top-level class definitions.
 
 ## Braces
-Always use K&R style braces (same as TypeScript guide)
+Start braces on the same line.  
 ```java
 if (true) {
   // good
@@ -55,7 +55,7 @@ if (condition) {
 if (condition) return; // bad
 ```
 
-Empty blocks should be written concisely:
+Empty blocks should be written on one line.
 ```java
 void doNothing() {} // good
 
@@ -67,10 +67,12 @@ void doNothing() {
 
 ### One declaration per line
 ```java
+// good
 int a;
-int b; // good
+int b;    
 
-int a, b; // bad
+// bad
+int a, b; 
 ```
 
 ### Access modifiers
@@ -111,13 +113,13 @@ public String getName() { // good
 }
 ```
 
-Annotations on fields may appear on the same line when there is only one:
+Annotations on fields may appear on the same line when there is only one.
 ```java
 @Nullable private String name; // ok
 ```
 
 ## Imports
-Never use wildcard imports.
+Never use wildcard imports, it wastes resources.
 ```java
 import java.util.List;
 import java.util.Map; // good
@@ -128,8 +130,10 @@ import java.util.*;   // bad
 Imports are ordered as follows with a blank line separating each group:
 1. Static imports
 2. `java.*` and `javax.*`
-3. Third-party libraries (alphabetical by top-level package)
+3. Third-party libraries
 4. Internal/project imports
+
+Order imports alphabetically within each group.
 
 ## Commas
 Always use trailing commas in multi-line enums and annotations.
@@ -138,25 +142,15 @@ Always use trailing commas in multi-line enums and annotations.
 enum Status {
   PENDING,
   ACTIVE,
-  CLOSED, // <-- this one
+  CLOSED, // <-- trailing comma
 }
 ```
 
 ## Strings
-Always use double quotes for string literals. Single quotes are for `char` literals only —
-never use them for strings.
+Always use double quotes for string literals. Single quotes are for `char` literals only.  
 ```java
-String s = "hello"; // good
-char c = 'h';       // only acceptable use of single quotes
-```
-
-Prefer `String.format()` or `StringBuilder` over repeated `+` concatenation in loops:
-```java
-// good
-String result = String.format("Hello, %s! You are %d years old.", name, age);
-
-// bad (especially in a loop)
-String result = "Hello, " + name + "! You are " + age + " years old.";
+String s = "hello"; 
+char c = 'h';
 ```
 
 ## Comments

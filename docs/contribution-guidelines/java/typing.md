@@ -11,7 +11,7 @@ It is worth noting the verbage on some of these standards. Never/always should b
 "preferred" or "rarely" means decisions are up to the programmer and should take some consideration. If a
 bad-practice of typing is required than it should be denoted in a PR description.
 
-## 1. Casting
+## Casting
 Rarely use explicit casting. Always guard casts with an `instanceof` check to avoid
 `ClassCastException` at runtime.
 ```java
@@ -24,7 +24,7 @@ if (animal instanceof Dog dog) { // pattern matching instanceof (Java 16+)
 Dog dog = (Dog) animal;          // will throw runtime exception if animal is not a Dog
 ```
 
-## 2. Generics
+## Generics
 Never use raw types, always provide type parameters. Raw types disable compile-time type
 checking and can cause `ClassCastException` at runtime.
 ```java
@@ -41,7 +41,7 @@ public void printAll(List<? extends Shape> shapes) { ... } // ok — read-only, 
 public void processAll(List<?> items) { ... } // rarely — only if truly type-agnostic
 ```
 
-## 3. Nullability
+## Nullability
 Never return `null` from a method when absence of a value is a valid outcome, use
 `Optional<T>` instead. This makes the possibility of an absent value explicit in the type
 signature.
@@ -64,7 +64,7 @@ Never use `Optional` as a method parameter or field type, only as a return type.
 public void process(Optional<String> name) { ... } // bad — use @Nullable or overloads instead
 ```
 
-## 4. `var`
+## `var`
 `var` is acceptable for local variables when the inferred type is immediately obvious from
 the right-hand side. Never use it when the type would be unclear to a reader.
 ```java
@@ -75,7 +75,7 @@ var result = service.process(input); // bad — type is not clear without checki
 
 Never use `var` for fields, method parameters, or return types. Only local variables.
 
-## 5. Wrapper Types
+## Wrapper Types
 Never use wrapper types (`Integer`, `Boolean`, `Long`, etc.) for local variables or method
 parameters unless required (e.g. a collection element type or an explicitly nullable value).
 Prefer primitives.
@@ -85,7 +85,7 @@ Integer count = 0; // bad — unnecessary boxing
 List<Integer> ids; // good — collections require wrapper types
 ```
 
-## 6. Enums Over Stringly-Typed Values
+## Enums Over Stringly-Typed Values
 Never use `String` or `int` constants to represent a fixed set of values. Always use enums,
 which are type-safe and checked at compile time.
 ```java
