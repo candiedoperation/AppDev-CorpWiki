@@ -4,10 +4,8 @@ sidebar_position: 1
 
 # Local Development Guide
 
-:::info Port Conflict Warning
-If you are running the Docusaurus documentation server locally (via `npm start` in the `AppDev-CorpWiki` directory), it will attempt to use port `3000` by default. Since the People Portal backend also runs on port `3000`, this can cause a port conflict.
-
-To resolve this, either start the People Portal backend **before** starting Docusaurus (Docusaurus will automatically increment to the next available port, like `3001`), or manually set a different port for Docusaurus.
+:::info Default Ports
+The Docusaurus documentation server (`npm start` in `AppDev-CorpWiki`) is pinned to port `3001` to avoid colliding with the People Portal backend on port `3000`. If you need to change either port, update the `start` script in `CorpWiki/package.json` and the `PORT` value in your server `.env`.
 :::
 
 This guide covers setting up dependencies for running the People Portal locally.
@@ -79,7 +77,7 @@ services:
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.12.1}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.5.2}
     ports:
       - ${COMPOSE_PORT_HTTP:-9000}:9000
       - ${COMPOSE_PORT_HTTPS:-9443}:9443
@@ -100,7 +98,7 @@ services:
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.12.1}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.5.2}
     restart: unless-stopped
     user: root
     volumes:
@@ -143,6 +141,16 @@ Once Authentik is running, configure the Application and Provider to allow Peopl
    - **Client Type**: `Confidential`
    - **Redirect URIs**: `http://localhost:3000/api/auth/redirect` (Replace `3000` with your backend server's port if running on a different port locally).
 5. Take note of the **Client ID** and **Client Secret**. These correspond to the `PEOPLEPORTAL_OIDC_CLIENTID` and `PEOPLEPORTAL_OIDC_CLIENTSECRET` environment variables on your People Portal server.
+
+### Authentik Admin API Token
+
+The People Portal server makes administrative calls to Authentik (creating groups, listing users, managing memberships) using a long-lived API token.
+
+1. Navigate to **Directory** > **Tokens & App Passwords** and click **Create**.
+2. Set **User** to `akadmin`.
+3. Set **Intent** to `API Token`.
+4. Uncheck **Expiring** so the token never expires.
+5. Set the token as `PEOPLEPORTAL_AUTHENTIK_TOKEN` in your server `.env`.
 
 ### Defining the `people_portal` Scope
 
@@ -238,8 +246,32 @@ PEOPLEPORTAL_AUTHENTIK_TOKEN=your_authentik_service_account_token
 PEOPLEPORTAL_GITEA_ENDPOINT=http://localhost:10000
 PEOPLEPORTAL_GITEA_TOKEN=your_gitea_admin_token
 
+# Gitea Webhook Target
+# Public URL the Gitea instance can reach to deliver webhooks. For local dev,
+# this is typically the same as PEOPLEPORTAL_BASE_URL. If left unset, Gitea
+# system hooks will be registered with broken `undefined/...` URLs on first run.
+PEOPLEPORTAL_WEBHOOK_URL=http://localhost:3000
+
+# Slack
+# Bot User OAuth Token (xoxb-...) and the workspace invite URL.
+# These are loaded eagerly — the server will fail to start if either is missing.
+PEOPLEPORTAL_SLACK_BOT_TOKEN=xoxb-your-slack-bot-token
+PEOPLEPORTAL_SLACK_INVITE_URL=https://join.slack.com/t/your-workspace/shared_invite/...
+
 # Node TLS (Only strictly necessary if connecting to instances with self-signed certs)
 # NODE_TLS_REJECT_UNAUTHORIZED=0
+
+# AWS (placeholders are fine unless you're working on AWS provisioning features)
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=your-aws-access-key-id
+AWS_SECRET_ACCESS_KEY=your-aws-secret-access-key
+AWS_ORG_ROOT_ID=your-org-root-id
+AWS_NONPROD_OU_ID=your-nonprod-ou-id
+AWS_MANAGEMENT_ACCOUNT_ID=your-management-account-id
+AWS_ADMIN_ROLE_NAME=OrganizationAccountAccessRole
+AWS_DEFAULT_BUDGET_AMOUNT=20
+AWS_BILLING_ALERT_EMAIL=you@example.com
+S3_BUCKET_NAME=your-s3-bucket-name
 ```
 
 #### Starting the Server
